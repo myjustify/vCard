@@ -1,0 +1,106 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+#qrcode{
+    /* position: absolute;
+    width: 200px;
+    height: 200px;
+    top: -1000px; */
+}
+body{
+    background-color: beige;
+}
+.container{
+    padding: 30px 10px;
+    background-color: #fff;
+    margin: 30px auto 0;
+    max-width: 750px;
+}
+.header{
+    text-align: center;
+    font-size: 26px;
+}
+.container .form-box{
+    display: flex;
+}
+@media screen and (max-width: 600px) {
+    .container .form-box{
+        display: flex;
+        flex-direction: column;
+    }
+    .container .form-box .form {
+        margin-bottom: 40px;
+    }
+}
+.genreaterQR{
+    /* text-align: center; */
+}
+.genreaterQR button{
+    width: 100px;
+    height: 40px;
+    margin-top: 20px;
+    margin-right: 10px;
+    color: azure;
+    background: #a9cfd0;
+    border: none;
+    border-radius: 4px;
+}
+.container .form-box .qr{
+    width: 200px;
+    height: 200px;
+    background: #eee;
+    position: relative;
+}
+.container .form-box .qr img{
+    width: 200px;
+    height: 200px;
+}
+.container .form-box .qr .fill{
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 0;
+    left: 0;
+    text-align: center;
+    line-height: 200px;
+    color: #fff;
+}
+
+.container .form-box .form {
+    flex: 1;
+    margin-right: 20px;
+}
+
+.container .form-box .form .form-item{
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    font-size: 18px;
+    border-bottom: 1px dashed #7d7d7c;
+}
+
+.container .form-box .form .form-item .label {
+    width: 70px;
+    text-align: center;
+    color: #7d7d7c;
+}
+.container .form-box .form .form-item .input{
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+.container .form-box .form .form-item input {
+    flex: 1;
+    border: none;
+    height: 30px;
+    line-height: 30px;
+    outline: none;
+    color: #7d7d7c;
+    font-size: 16px;
+}
+.container .form-box .form .form-item .del{
+    color: red;
+    width: 30px;
+    text-align: center;
+}

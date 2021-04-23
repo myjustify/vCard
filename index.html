@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>物泊名片生成器</title>
+</head>
+<link rel="stylesheet" href="./index.css">
+<script src="./qrcode.js"></script>
+<script src="./vue.min.js"></script>
+<body>
+    
+    <div id="app" class="container">
+        <div class="header">名片二维码</div>
+        <div class="form-box">
+            <div class="form">
+                <div class="form-item" v-for="(item,index) in formList" :key='item.label'>
+                    <div class="label">{{item.label}}:</div>
+                    <div class="input">
+                        <input type="text" v-model='item.value'>
+                        <div class="del" v-if='item.del' @click='del(index)'>-</div>
+                    </div>
+                </div>
+                <div class="genreaterQR">
+                    <button @click='genreaterQR'>生成二维码</button>
+                    <button @click='addselPhone'>添加手机</button>
+                    <button @click='addPhone'>添加电话</button>
+                </div>
+            </div>
+            <div class="qr">
+                <div id="qrcode" v-show='qr'></div>
+                <div class="fill" v-show='!qr'>二维码</div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            qr: false,
+            draw: null,
+            block: false,
+            formList: [
+                {
+                    'label': '姓名',
+                    'value': '',
+                    'field': 'FN: '
+                },
+                {
+                    'label': '手机',
+                    'name': 'selPhone',
+                    'del': true,
+                    'value': '',
+                    'field': 'TEL;CELL;VOICE: '
+                },
+                {
+                    'label': '电话',
+                    'name': 'phone',
+                    'del': true,
+                    'value': '',
+                    'field': 'TEL;WORK;VOICE: '
+                },
+                // {
+                //     'label': '微信',
+                //     'value': '',
+                //     'field': 'X-WX: '
+                // },
+                {
+                    'label': '邮箱',
+                    'value': '',
+                    'field': 'EMAIL; PREF; INTERNET: '
+                },
+                {
+                    'label': '公司',
+                    'value': '',
+                    'field': 'ORG: '
+                },
+                {
+                    'label': '地址',
+                    'value': '',
+                    'field': 'ADR;WORK: '
+                },
+                {
+                    'label': '职位',
+                    'value': '',
+                    'field': 'ROLE: '
+                },
+                {
+                    'label': 'title',
+                    'value': '',
+                    'field': 'TITLE: '
+                },
+                {
+                    'label': '备注',
+                    'value': '',
+                    'field': 'NOTE: '
+                }
+            ]
+        },
+        mounted(){
+            this.draw = new QRCode(document.getElementById("qrcode"), {
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        },
+        methods: {
+            canAble(){
+                let block = this.block
+                if(this.block){
+                    return false
+                }
+                this.block = true
+                setTimeout(() => {
+                    this.block = false
+                }, 500);
+                return true
+            },
+            addselPhone(){
+                if(!this.canAble()) return;
+                let selPhone = {
+                    'label': '手机',
+                    'del': true,
+                    'name': 'selPhone',
+                    'value': '',
+                    'field': 'TEL;CELL;VOICE: '
+                }
+                let formList = this.formList;
+                let index = -1;
+                formList.forEach((item,i)=>{
+                    if(item.name=='selPhone'){
+                        index = i;
+                    }
+                })
+                let ix = 0;
+                if(index!=-1) ix = index;
+                formList.splice(ix+1,0,selPhone)
+                this.formList = formList
+            },
+            addPhone(){
+                if(!this.canAble()) return;
+                let phone = {
+                    'label': '电话',
+                    'name': 'phone',
+                    'del': true,
+                    'value': '',
+                    'field': 'TEL;WORK;VOICE: '
+                }
+                let formList = this.formList;
+                let index = -1;
+                formList.forEach((item,i)=>{
+                    if(item.name=='phone'){
+                        index = i;
+                    }
+                })
+                let ix = 0;
+                if(index!=-1) ix = index;
+                formList.splice(ix+1,0,phone)
+                this.formList = formList
+            },
+            del(index){
+                this.formList.splice(index,1)
+            },
+            genreaterQR(){
+                if(!this.canAble()) return;
+                let params = this.getParams();
+                this.draw.clear()
+                this.makeCode(params)
+            },
+            getParams(){
+                let start = `BEGIN:VCARD\nVERSION: 3.0\n`;
+                let end = `END:VCARD`
+                let formList = this.formList;
+                let mid = '';
+                formList.forEach(item=>{
+                    if(item.value){
+                        mid = `${mid}${item.field}${item.value}\n`
+                    }
+                })
+                return `${start}${mid}${end}`;
+            },
+            makeCode(str){
+                console.log(str)
+                this.draw.makeCode(str)
+                this.qr = true
+            }
+        },
+    })
+
+    
+</script>
+
+</html>
